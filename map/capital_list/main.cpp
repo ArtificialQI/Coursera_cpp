@@ -70,7 +70,7 @@ int main()
                     if (count == 1)
                         cout << "There are no countries in the world" << endl;
                     else
-                        print_map(list); 
+                        print_map(list);  
                 }               
         }
 
