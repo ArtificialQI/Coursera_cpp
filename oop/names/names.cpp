@@ -2,116 +2,112 @@
 #include <map>
 #include <vector>
 #include <string>
-//original solution
+
 using namespace std;
 
 vector<string> FindNamesHistory(const map<int, string>& names_by_year,
-    int year) {
-    vector<string> names;
-    // перебираем всю историю в хронологическом порядке
-    for (const auto& item : names_by_year) {
-        // если очередное имя не относится к будущему и отличается от предыдущего,
-        if (item.first <= year && (names.empty() || names.back() != item.second)) {
-            // добавляем его в историю
-            names.push_back(item.second);
-        }
+                                int year) {
+  vector<string> names;
+  // РїРµСЂРµР±РёСЂР°РµРј РІСЃСЋ РёСЃС‚РѕСЂРёСЋ РІ С…СЂРѕРЅРѕР»РѕРіРёС‡РµСЃРєРѕРј РїРѕСЂСЏРґРєРµ
+  for (const auto& item : names_by_year) {
+    // РµСЃР»Рё РѕС‡РµСЂРµРґРЅРѕРµ РёРјСЏ РЅРµ РѕС‚РЅРѕСЃРёС‚СЃСЏ Рє Р±СѓРґСѓС‰РµРјСѓ Рё РѕС‚Р»РёС‡Р°РµС‚СЃСЏ РѕС‚ РїСЂРµРґС‹РґСѓС‰РµРіРѕ,
+    if (item.first <= year && (names.empty() || names.back() != item.second)) {
+      // РґРѕР±Р°РІР»СЏРµРј РµРіРѕ РІ РёСЃС‚РѕСЂРёСЋ
+      names.push_back(item.second);
     }
-    return names;
+  }
+  return names;
 }
 
 string BuildJoinedName(vector<string> names) {
-    // нет истории — имя неизвестно
-    if (names.empty()) {
-        return "";
+  // РЅРµС‚ РёСЃС‚РѕСЂРёРё вЂ” РёРјСЏ РЅРµРёР·РІРµСЃС‚РЅРѕ
+  if (names.empty()) {
+    return "";
+  }
+  // РјРµРЅСЏРµРј РїСЂСЏРјРѕР№ С…СЂРѕРЅРѕР»РѕРіРёС‡РµСЃРєРёР№ РїРѕСЂСЏРґРѕРє РЅР° РѕР±СЂР°С‚РЅС‹Р№
+  reverse(begin(names), end(names));
+  
+  // РЅР°С‡РёРЅР°РµРј СЃС‚СЂРѕРёС‚СЊ РїРѕР»РЅРѕРµ РёРјСЏ СЃ СЃР°РјРѕРіРѕ РїРѕСЃР»РµРґРЅРµРіРѕ
+  string joined_name = names[0];
+  
+  // РїРµСЂРµР±РёСЂР°РµРј РІСЃРµ РїРѕСЃР»РµРґСѓСЋС‰РёРµ РёРјРµРЅР°
+  for (int i = 1; i < names.size(); ++i) {
+    if (i == 1) {
+      // РµСЃР»Рё СЌС‚Рѕ РїРµСЂРІРѕРµ В«РёСЃС‚РѕСЂРёС‡РµСЃРєРѕРµВ» РёРјСЏ, РѕС‚РґРµР»СЏРµРј РµРіРѕ РѕС‚ РїРѕСЃР»РµРґРЅРµРіРѕ СЃРєРѕР±РєРѕР№
+      joined_name += " (";
+    } else {
+      // РµСЃР»Рё СЌС‚Рѕ РЅРµ РїРµСЂРІРѕРµ РёРјСЏ, РѕС‚РґРµР»СЏРµРј РѕС‚ РїСЂРµРґС‹РґСѓС‰РµРіРѕ Р·Р°РїСЏС‚РѕР№
+      joined_name += ", ";
     }
-    // меняем прямой хронологический порядок на обратный
-    reverse(begin(names), end(names));
-
-    // начинаем строить полное имя с самого последнего
-    string joined_name = names[0];
-
-    // перебираем все последующие имена
-    for (int i = 1; i < names.size(); ++i) {
-        if (i == 1) {
-            // если это первое «историческое» имя, отделяем его от последнего скобкой
-            joined_name += " (";
-        }
-        else {
-            // если это не первое имя, отделяем от предыдущего запятой
-            joined_name += ", ";
-        }
-        // и добавляем очередное имя
-        joined_name += names[i];
-    }
-
-    // если в истории было больше одного имени, мы открывали скобку — закроем её
-    if (names.size() > 1) {
-        joined_name += ")";
-    }
-    // имя со всей историей готово
-    return joined_name;
+    // Рё РґРѕР±Р°РІР»СЏРµРј РѕС‡РµСЂРµРґРЅРѕРµ РёРјСЏ
+    joined_name += names[i];
+  }
+  
+  // РµСЃР»Рё РІ РёСЃС‚РѕСЂРёРё Р±С‹Р»Рѕ Р±РѕР»СЊС€Рµ РѕРґРЅРѕРіРѕ РёРјРµРЅРё, РјС‹ РѕС‚РєСЂС‹РІР°Р»Рё СЃРєРѕР±РєСѓ вЂ” Р·Р°РєСЂРѕРµРј РµС‘
+  if (names.size() > 1) {
+    joined_name += ")";
+  }
+  // РёРјСЏ СЃРѕ РІСЃРµР№ РёСЃС‚РѕСЂРёРµР№ РіРѕС‚РѕРІРѕ
+  return joined_name;
 }
 
-// см. решение предыдущей задачи
+// СЃРј. СЂРµС€РµРЅРёРµ РїСЂРµРґС‹РґСѓС‰РµР№ Р·Р°РґР°С‡Рё
 string BuildFullName(const string& first_name, const string& last_name) {
-    if (first_name.empty() && last_name.empty()) {
-        return "Incognito";
-    }
-    else if (first_name.empty()) {
-        return last_name + " with unknown first name";
-    }
-    else if (last_name.empty()) {
-        return first_name + " with unknown last name";
-    }
-    else {
-        return first_name + " " + last_name;
-    }
+  if (first_name.empty() && last_name.empty()) {
+    return "Incognito";
+  } else if (first_name.empty()) {
+    return last_name + " with unknown first name";
+  } else if (last_name.empty()) {
+    return first_name + " with unknown last name";
+  } else {
+    return first_name + " " + last_name;
+  }
 }
 
 class Person {
 public:
-    void ChangeFirstName(int year, const string& first_name) {
-        first_names[year] = first_name;
+  void ChangeFirstName(int year, const string& first_name) {
+    first_names[year] = first_name;
+  }
+  void ChangeLastName(int year, const string& last_name) {
+    last_names[year] = last_name;
+  }
+  
+  string GetFullName(int year) {
+    // РЅР°Р№РґС‘Рј РёСЃС‚РѕСЂРёСЋ РёР·РјРµРЅРµРЅРёР№ РёРјРµРЅРё Рё С„Р°РјРёР»РёРё
+    // РІ РґР°РЅРЅРѕРј СЃР»СѓС‡Р°Рµ СЌС‚Рѕ РёР·Р»РёС€РЅРµ, С‚Р°Рє РєР°Рє РЅР°Рј РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ СѓР·РЅР°С‚СЊ РїРѕСЃР»РµРґРЅРёРµ РёРјСЏ Рё С„Р°РјРёР»РёСЋ, РЅРѕ РїРѕС‡РµРјСѓ Р±С‹ РЅРµ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РіРѕС‚РѕРІС‹Рµ С„СѓРЅРєС†РёРё?
+    const vector<string> first_names_history = FindFirstNamesHistory(year);
+    const vector<string> last_names_history = FindLastNamesHistory(year);
+    
+    // РїРѕРґРіРѕС‚РѕРІРёРј РґР°РЅРЅС‹Рµ РґР»СЏ С„СѓРЅРєС†РёРё BuildFullName: РІРѕР·СЊРјС‘Рј РїРѕСЃР»РµРґРЅРёРµ РёРјСЏ Рё С„Р°РјРёР»РёСЋ РёР»Рё РѕСЃС‚Р°РІРёРј РёС… РїСѓСЃС‚С‹РјРё, РµСЃР»Рё РѕРЅРё РЅРµРёР·РІРµСЃС‚РЅС‹
+    string first_name;
+    string last_name;
+    if (!first_names_history.empty()) {
+      first_name = first_names_history.back();
     }
-    void ChangeLastName(int year, const string& last_name) {
-        last_names[year] = last_name;
+    if (!last_names_history.empty()) {
+      last_name = last_names_history.back();
     }
-
-    string GetFullName(int year) {
-        // найдём историю изменений имени и фамилии
-        // в данном случае это излишне, так как нам достаточно узнать последние имя и фамилию, но почему бы не использовать готовые функции?
-        const vector<string> first_names_history = FindFirstNamesHistory(year);
-        const vector<string> last_names_history = FindLastNamesHistory(year);
-
-        // подготовим данные для функции BuildFullName: возьмём последние имя и фамилию или оставим их пустыми, если они неизвестны
-        string first_name;
-        string last_name;
-        if (!first_names_history.empty()) {
-            first_name = first_names_history.back();
-        }
-        if (!last_names_history.empty()) {
-            last_name = last_names_history.back();
-        }
-        return BuildFullName(first_name, last_name);
-    }
-
-    string GetFullNameWithHistory(int year) {
-        // получим полное имя со всей историей
-        const string first_name = BuildJoinedName(FindFirstNamesHistory(year));
-        // получим полную фамилию со всей историей
-        const string last_name = BuildJoinedName(FindLastNamesHistory(year));
-        // объединим их с помощью готовой функции
-        return BuildFullName(first_name, last_name);
-    }
+    return BuildFullName(first_name, last_name);
+  }
+  
+  string GetFullNameWithHistory(int year) {
+    // РїРѕР»СѓС‡РёРј РїРѕР»РЅРѕРµ РёРјСЏ СЃРѕ РІСЃРµР№ РёСЃС‚РѕСЂРёРµР№
+    const string first_name = BuildJoinedName(FindFirstNamesHistory(year));
+    // РїРѕР»СѓС‡РёРј РїРѕР»РЅСѓСЋ С„Р°РјРёР»РёСЋ СЃРѕ РІСЃРµР№ РёСЃС‚РѕСЂРёРµР№
+    const string last_name = BuildJoinedName(FindLastNamesHistory(year));
+    // РѕР±СЉРµРґРёРЅРёРј РёС… СЃ РїРѕРјРѕС‰СЊСЋ РіРѕС‚РѕРІРѕР№ С„СѓРЅРєС†РёРё
+    return BuildFullName(first_name, last_name);
+  }
 
 private:
-    vector<string> FindFirstNamesHistory(int year) {
-        return FindNamesHistory(first_names, year);
-    }
-    vector<string> FindLastNamesHistory(int year) {
-        return FindNamesHistory(last_names, year);
-    }
+  vector<string> FindFirstNamesHistory(int year) {
+    return FindNamesHistory(first_names, year);
+  }
+  vector<string> FindLastNamesHistory(int year) {
+    return FindNamesHistory(last_names, year);
+  }
 
-    map<int, string> first_names;
-    map<int, string> last_names;
+  map<int, string> first_names;
+  map<int, string> last_names;
 };
