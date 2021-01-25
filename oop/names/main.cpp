@@ -4,18 +4,18 @@
 #include <vector>
 using namespace std;
 
-// если имя неизвестно, возвращает пустую строку
+// ГҐГ±Г«ГЁ ГЁГ¬Гї Г­ГҐГЁГ§ГўГҐГ±ГІГ­Г®, ГўГ®Г§ГўГ°Г Г№Г ГҐГІ ГЇГіГ±ГІГіГѕ Г±ГІГ°Г®ГЄГі
 string FindNameByYear(const map<int, string>& names, int year) {
-    string name;  // изначально имя неизвестно
+    string name;  // ГЁГ§Г­Г Г·Г Г«ГјГ­Г® ГЁГ¬Гї Г­ГҐГЁГ§ГўГҐГ±ГІГ­Г®
 
-    // перебираем всю историю по возрастанию ключа словаря, то есть в хронологическом порядке
+    // ГЇГҐГ°ГҐГЎГЁГ°Г ГҐГ¬ ГўГ±Гѕ ГЁГ±ГІГ®Г°ГЁГѕ ГЇГ® ГўГ®Г§Г°Г Г±ГІГ Г­ГЁГѕ ГЄГ«ГѕГ·Г  Г±Г«Г®ГўГ Г°Гї, ГІГ® ГҐГ±ГІГј Гў ГµГ°Г®Г­Г®Г«Г®ГЈГЁГ·ГҐГ±ГЄГ®Г¬ ГЇГ®Г°ГїГ¤ГЄГҐ
     for (const auto& item : names) {
-        // если очередной год не больше данного, обновляем имя
+        // ГҐГ±Г«ГЁ Г®Г·ГҐГ°ГҐГ¤Г­Г®Г© ГЈГ®Г¤ Г­ГҐ ГЎГ®Г«ГјГёГҐ Г¤Г Г­Г­Г®ГЈГ®, Г®ГЎГ­Г®ГўГ«ГїГҐГ¬ ГЁГ¬Гї
         if (item.first <= year) {
             name = item.second;
         }
         else {
-            // иначе пора остановиться, так как эта запись и все последующие относятся к будущему
+            // ГЁГ­Г Г·ГҐ ГЇГ®Г°Г  Г®Г±ГІГ Г­Г®ГўГЁГІГјГ±Гї, ГІГ ГЄ ГЄГ ГЄ ГЅГІГ  Г§Г ГЇГЁГ±Гј ГЁ ГўГ±ГҐ ГЇГ®Г±Г«ГҐГ¤ГіГѕГ№ГЁГҐ Г®ГІГ­Г®Г±ГїГІГ±Гї ГЄ ГЎГіГ¤ГіГ№ГҐГ¬Гі
             break;
         }
     }
@@ -29,7 +29,7 @@ string GetNameStoryByYear(const map<int, string>& names, int year) {
         return "";
     --it;
     auto data = *it;
-    //строим вектор имен
+    //Г±ГІГ°Г®ГЁГ¬ ГўГҐГЄГІГ®Г° ГЁГ¬ГҐГ­
     for (; it != names.end(); --it)
     {
         auto f = *it;
@@ -37,7 +37,7 @@ string GetNameStoryByYear(const map<int, string>& names, int year) {
         if (it == names.begin())
             break;
     }
-    //убираем одинаковые имена
+    //ГіГЎГЁГ°Г ГҐГ¬ Г®Г¤ГЁГ­Г ГЄГ®ГўГ»ГҐ ГЁГ¬ГҐГ­Г 
     vector<string> temp;
     story.push_back("end");
     for (int i = 0; i < story.size() - 1; ++i)
@@ -46,14 +46,14 @@ string GetNameStoryByYear(const map<int, string>& names, int year) {
 
     string result;
     int count = 0;
-    //организуем вывод без первого имени(можно переделать но не суть)
+    //Г®Г°ГЈГ Г­ГЁГ§ГіГҐГ¬ ГўГ»ГўГ®Г¤ ГЎГҐГ§ ГЇГҐГ°ГўГ®ГЈГ® ГЁГ¬ГҐГ­ГЁ(Г¬Г®Г¦Г­Г® ГЇГҐГ°ГҐГ¤ГҐГ«Г ГІГј Г­Г® Г­ГҐ Г±ГіГІГј)
     for (auto item : temp)
     {
         if (item != data.second || count != 0)
             result += item + ", ";
         ++count;
     }
-    //для корректного вывода строк
+    //Г¤Г«Гї ГЄГ®Г°Г°ГҐГЄГІГ­Г®ГЈГ® ГўГ»ГўГ®Г¤Г  Г±ГІГ°Г®ГЄ
     if (!result.empty())
     {
         result.pop_back();
@@ -70,32 +70,32 @@ public:
         last_names[year] = last_name;
     }
     string GetFullName(int year) {
-        // получаем имя и фамилию по состоянию на год year
+        // ГЇГ®Г«ГіГ·Г ГҐГ¬ ГЁГ¬Гї ГЁ ГґГ Г¬ГЁГ«ГЁГѕ ГЇГ® Г±Г®Г±ГІГ®ГїГ­ГЁГѕ Г­Г  ГЈГ®Г¤ year
         const string first_name = FindNameByYear(first_names, year);
         const string last_name = FindNameByYear(last_names, year);
 
-        // если и имя, и фамилия неизвестны
+        // ГҐГ±Г«ГЁ ГЁ ГЁГ¬Гї, ГЁ ГґГ Г¬ГЁГ«ГЁГї Г­ГҐГЁГ§ГўГҐГ±ГІГ­Г»
         if (first_name.empty() && last_name.empty()) {
             return "Incognito";
 
-            // если неизвестно только имя
+            // ГҐГ±Г«ГЁ Г­ГҐГЁГ§ГўГҐГ±ГІГ­Г® ГІГ®Г«ГјГЄГ® ГЁГ¬Гї
         }
         else if (first_name.empty()) {
             return last_name + " with unknown first name";
 
-            // если неизвестна только фамилия
+            // ГҐГ±Г«ГЁ Г­ГҐГЁГ§ГўГҐГ±ГІГ­Г  ГІГ®Г«ГјГЄГ® ГґГ Г¬ГЁГ«ГЁГї
         }
         else if (last_name.empty()) {
             return first_name + " with unknown last name";
 
-            // если известны и имя, и фамилия
+            // ГҐГ±Г«ГЁ ГЁГ§ГўГҐГ±ГІГ­Г» ГЁ ГЁГ¬Гї, ГЁ ГґГ Г¬ГЁГ«ГЁГї
         }
         else {
             return first_name + " " + last_name;
         }
     }
     string GetFullNameWithHistory(int year) {
-        // получаем имя и фамилию по состоянию на год year
+        // ГЇГ®Г«ГіГ·Г ГҐГ¬ ГЁГ¬Гї ГЁ ГґГ Г¬ГЁГ«ГЁГѕ ГЇГ® Г±Г®Г±ГІГ®ГїГ­ГЁГѕ Г­Г  ГЈГ®Г¤ year
         const string first_name = FindNameByYear(first_names, year);
         const string last_name = FindNameByYear(last_names, year);
         string story_first = GetNameStoryByYear(first_names, year);
@@ -105,27 +105,27 @@ public:
             story_first = " (" + story_first + ")";
         if (!story_last.empty())
             story_last = " (" + story_last + ")";
-        // если и имя, и фамилия неизвестны
+        // ГҐГ±Г«ГЁ ГЁ ГЁГ¬Гї, ГЁ ГґГ Г¬ГЁГ«ГЁГї Г­ГҐГЁГ§ГўГҐГ±ГІГ­Г»
         if (first_name.empty() && last_name.empty()) {
             return "Incognito";
 
-            // если неизвестно только имя
+            // ГҐГ±Г«ГЁ Г­ГҐГЁГ§ГўГҐГ±ГІГ­Г® ГІГ®Г«ГјГЄГ® ГЁГ¬Гї
         }
         else if (first_name.empty()) {
             return last_name + story_last + " with unknown first name";
 
-            // если неизвестна только фамилия
+            // ГҐГ±Г«ГЁ Г­ГҐГЁГ§ГўГҐГ±ГІГ­Г  ГІГ®Г«ГјГЄГ® ГґГ Г¬ГЁГ«ГЁГї
         }
         else if (last_name.empty()) {
             return first_name + story_first + " with unknown last name";
 
-            // если известны и имя, и фамилия
+            // ГҐГ±Г«ГЁ ГЁГ§ГўГҐГ±ГІГ­Г» ГЁ ГЁГ¬Гї, ГЁ ГґГ Г¬ГЁГ«ГЁГї
         }
         else {
             return first_name + story_first + " " + last_name + story_last;
         }
     }
-private:
+private: 
     map<int, string> first_names;
     map<int, string> last_names;
 };
