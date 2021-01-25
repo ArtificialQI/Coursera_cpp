@@ -4,18 +4,18 @@
 #include <vector>
 using namespace std;
 
-// åñëè èìÿ íåèçâåñòíî, âîçâðàùàåò ïóñòóþ ñòðîêó
+// если имя неизвестно, возвращает пустую строку
 string FindNameByYear(const map<int, string>& names, int year) {
-    string name;  // èçíà÷àëüíî èìÿ íåèçâåñòíî
+    string name;  // изначально имя неизвестно
 
-    // ïåðåáèðàåì âñþ èñòîðèþ ïî âîçðàñòàíèþ êëþ÷à ñëîâàðÿ, òî åñòü â õðîíîëîãè÷åñêîì ïîðÿäêå
+    // перебираем всю историю по возрастанию ключа словаря, то есть в хронологическом порядке
     for (const auto& item : names) {
-        // åñëè î÷åðåäíîé ãîä íå áîëüøå äàííîãî, îáíîâëÿåì èìÿ
+        // если очередной год не больше данного, обновляем имя
         if (item.first <= year) {
             name = item.second;
         }
         else {
-            // èíà÷å ïîðà îñòàíîâèòüñÿ, òàê êàê ýòà çàïèñü è âñå ïîñëåäóþùèå îòíîñÿòñÿ ê áóäóùåìó
+            // иначе пора остановиться, так как эта запись и все последующие относятся к будущему
             break;
         }
     }
@@ -29,15 +29,15 @@ string GetNameStoryByYear(const map<int, string>& names, int year) {
         return "";
     --it;
     auto data = *it;
-    //ñòðîèì âåêòîð èìåí
+    //строим вектор имен
     for (; it != names.end(); --it)
     {
-        auto f = *it;
-        story.push_back(f.second);
+        auto f = *it;              
+        story.push_back(f.second);        
         if (it == names.begin())
             break;
     }
-    //óáèðàåì îäèíàêîâûå èìåíà
+    //убираем одинаковые имена
     vector<string> temp;
     story.push_back("end");
     for (int i = 0; i < story.size() - 1; ++i)
@@ -46,20 +46,20 @@ string GetNameStoryByYear(const map<int, string>& names, int year) {
 
     string result;
     int count = 0;
-    //îðãàíèçóåì âûâîä áåç ïåðâîãî èìåíè(ìîæíî ïåðåäåëàòü íî íå ñóòü)
+    //организуем вывод без первого имени(можно переделать но не суть)
     for (auto item : temp)
-    {
+    {       
         if (item != data.second || count != 0)
             result += item + ", ";
         ++count;
     }
-    //äëÿ êîððåêòíîãî âûâîäà ñòðîê
+    //для корректного вывода строк
     if (!result.empty())
     {
         result.pop_back();
         result.pop_back();
-    }
-    return result;
+    }    
+    return result;    
 }
 class Person {
 public:
@@ -70,32 +70,32 @@ public:
         last_names[year] = last_name;
     }
     string GetFullName(int year) {
-        // ïîëó÷àåì èìÿ è ôàìèëèþ ïî ñîñòîÿíèþ íà ãîä year
+        // получаем имя и фамилию по состоянию на год year
         const string first_name = FindNameByYear(first_names, year);
         const string last_name = FindNameByYear(last_names, year);
 
-        // åñëè è èìÿ, è ôàìèëèÿ íåèçâåñòíû
+        // если и имя, и фамилия неизвестны
         if (first_name.empty() && last_name.empty()) {
             return "Incognito";
 
-            // åñëè íåèçâåñòíî òîëüêî èìÿ
+            // если неизвестно только имя
         }
         else if (first_name.empty()) {
             return last_name + " with unknown first name";
 
-            // åñëè íåèçâåñòíà òîëüêî ôàìèëèÿ
+            // если неизвестна только фамилия
         }
         else if (last_name.empty()) {
             return first_name + " with unknown last name";
 
-            // åñëè èçâåñòíû è èìÿ, è ôàìèëèÿ
+            // если известны и имя, и фамилия
         }
         else {
             return first_name + " " + last_name;
         }
     }
     string GetFullNameWithHistory(int year) {
-        // ïîëó÷àåì èìÿ è ôàìèëèþ ïî ñîñòîÿíèþ íà ãîä year
+        // получаем имя и фамилию по состоянию на год year
         const string first_name = FindNameByYear(first_names, year);
         const string last_name = FindNameByYear(last_names, year);
         string story_first = GetNameStoryByYear(first_names, year);
@@ -105,27 +105,27 @@ public:
             story_first = " (" + story_first + ")";
         if (!story_last.empty())
             story_last = " (" + story_last + ")";
-        // åñëè è èìÿ, è ôàìèëèÿ íåèçâåñòíû
+        // если и имя, и фамилия неизвестны
         if (first_name.empty() && last_name.empty()) {
             return "Incognito";
 
-            // åñëè íåèçâåñòíî òîëüêî èìÿ
+            // если неизвестно только имя
         }
         else if (first_name.empty()) {
             return last_name + story_last + " with unknown first name";
 
-            // åñëè íåèçâåñòíà òîëüêî ôàìèëèÿ
+            // если неизвестна только фамилия
         }
         else if (last_name.empty()) {
             return first_name + story_first + " with unknown last name";
 
-            // åñëè èçâåñòíû è èìÿ, è ôàìèëèÿ
+            // если известны и имя, и фамилия
         }
         else {
             return first_name + story_first + " " + last_name + story_last;
         }
     }
-private: 
+private:
     map<int, string> first_names;
     map<int, string> last_names;
 };
