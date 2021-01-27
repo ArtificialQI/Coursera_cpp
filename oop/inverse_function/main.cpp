@@ -7,7 +7,7 @@ struct Image {
     double quality;
     double freshness;
     double rating;
-};
+}; 
 
 struct Params {
     double a;
@@ -55,7 +55,7 @@ public:
     };
 private:
     vector<FunctionPart> parts;
-    
+
 };
 
 
@@ -64,7 +64,7 @@ Function MakeWeightFunction(const Params& params, const Image& image) {
     function.AddPart('-', image.freshness * params.a + params.b);
     function.AddPart('+', image.rating * params.c);
     return function;
-}
+} 
 
 double ComputeImageWeight(const Params& params, const Image& image) {
     Function function = MakeWeightFunction(params, image);
@@ -77,7 +77,7 @@ double ComputeQualityByWeight(const Params& params,
     Function function = MakeWeightFunction(params, image);
     function.Invert();
     return function.Apply(weight);
-}
+} 
 
 int main() {
     Image image = { 10, 2, 6 };
@@ -85,4 +85,4 @@ int main() {
     cout << ComputeImageWeight(params, image) << endl;
     cout << ComputeQualityByWeight(params, image, 46) << endl;
     return 0;
-}
+} 
