@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 struct Image {
@@ -13,9 +14,52 @@ struct Params {
     double b;
     double c;
 };
+class FunctionPart {
+public:
+    FunctionPart(char new_operation, double new_value) {
+        operation = new_operation;
+        value = new_value;
+    }
+    double Apply (double source_value) const {
+        if (operation == '+')
+            return source_value + value;
+        else
+            return source_value - value;
+    }
+    void Invert() {
+        if (operation == '+')
+            operation = '-';
+        else
+            operation = '+';
+    }
+private:
+    char operation;
+    double value;
 
-Function MakeWeightFunction(const Params& params,
-    const Image& image) {
+};
+
+class Function {
+public:
+    void AddPart(char operation, double value) {
+        parts.push_back({operation, value});
+    }
+    double Apply(double value) const {
+        for (const FunctionPart& part : parts)
+            value = part.Apply(value);
+        return value;
+    }
+    void Invert() {
+        for (FunctionPart& part : parts)
+            part.Invert();
+       reverse(parts.begin(), parts.end()); 
+    };
+private:
+    vector<FunctionPart> parts;
+    
+};
+
+
+Function MakeWeightFunction(const Params& params, const Image& image) {
     Function function;
     function.AddPart('-', image.freshness * params.a + params.b);
     function.AddPart('+', image.rating * params.c);
