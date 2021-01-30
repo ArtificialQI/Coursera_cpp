@@ -2,107 +2,106 @@
 
 using namespace std;
 
-// один из способов вычисления наибольшего общего делителя (НОД) — рекурсивный:
-// вместо цикла функция будет вызывать себя же, но с другими аргументами
+// РѕРґРёРЅ РёР· СЃРїРѕСЃРѕР±РѕРІ РІС‹С‡РёСЃР»РµРЅРёСЏ РЅР°РёР±РѕР»СЊС€РµРіРѕ РѕР±С‰РµРіРѕ РґРµР»РёС‚РµР»СЏ (РќРћР”) вЂ” СЂРµРєСѓСЂСЃРёРІРЅС‹Р№:
+// РІРјРµСЃС‚Рѕ С†РёРєР»Р° С„СѓРЅРєС†РёСЏ Р±СѓРґРµС‚ РІС‹Р·С‹РІР°С‚СЊ СЃРµР±СЏ Р¶Рµ, РЅРѕ СЃ РґСЂСѓРіРёРјРё Р°СЂРіСѓРјРµРЅС‚Р°РјРё
 int GreatestCommonDivisor(int a, int b) {
-    if (b == 0) {
-        return a;
-    }
-    else {
-        return GreatestCommonDivisor(b, a % b);
-    }
+  if (b == 0) {
+    return a;
+  } else {
+    return GreatestCommonDivisor(b, a % b);
+  }
 }
 
 class Rational {
 public:
-    Rational() {  // дробь по умолчанию — 0/1
-        numerator = 0;
-        denominator = 1;
+  Rational() {  // РґСЂРѕР±СЊ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ вЂ” 0/1
+    numerator = 0;
+    denominator = 1;
+  }
+  Rational(int new_numerator, int new_denominator) {
+    const int gcd = GreatestCommonDivisor(new_numerator, new_denominator);
+    // СЃРѕРєСЂР°С‚РёРј РґСЂРѕР±СЊ, СЂР°Р·РґРµР»РёРІ С‡РёСЃР»РёС‚РµР»СЊ Рё Р·РЅР°РјРµРЅР°С‚РµР»СЊ РЅР° РёС… РќРћР”
+    numerator = new_numerator / gcd;
+    denominator = new_denominator / gcd;
+    // Р·РЅР°РјРµРЅР°С‚РµР»СЊ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РїРѕР»РѕР¶РёС‚РµР»СЊРЅС‹Рј
+    if (denominator < 0) {
+      denominator = -denominator;
+      numerator = -numerator;
     }
-    Rational(int new_numerator, int new_denominator) {
-        const int gcd = GreatestCommonDivisor(new_numerator, new_denominator);
-        // сократим дробь, разделив числитель и знаменатель на их НОД
-        numerator = new_numerator / gcd;
-        denominator = new_denominator / gcd;
-        // знаменатель должен быть положительным
-        if (denominator < 0) {
-            denominator = -denominator;
-            numerator = -numerator;
-        }
-    }
+  }
 
-    int Numerator() const {
-        return numerator;
-    }
+  int Numerator() const {
+    return numerator;
+  }
 
-    int Denominator() const {
-        return denominator;
-    }
+  int Denominator() const {
+    return denominator;
+  }
 
 private:
-    int numerator;
-    int denominator;
+  int numerator;
+  int denominator;
 };
 
-// поскольку дроби сокращены, достаточно сравнить числители и знаменатели
+// РїРѕСЃРєРѕР»СЊРєСѓ РґСЂРѕР±Рё СЃРѕРєСЂР°С‰РµРЅС‹, РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ СЃСЂР°РІРЅРёС‚СЊ С‡РёСЃР»РёС‚РµР»Рё Рё Р·РЅР°РјРµРЅР°С‚РµР»Рё
 bool operator == (const Rational& lhs, const Rational& rhs) {
-    return lhs.Numerator() == rhs.Numerator() &&
-        lhs.Denominator() == rhs.Denominator();
+  return lhs.Numerator() == rhs.Numerator() &&
+      lhs.Denominator() == rhs.Denominator();
 }
 
-// используем обычную формулу сложения дробей, основанную на приведении слагаемых к общему знаменателю
+// РёСЃРїРѕР»СЊР·СѓРµРј РѕР±С‹С‡РЅСѓСЋ С„РѕСЂРјСѓР»Сѓ СЃР»РѕР¶РµРЅРёСЏ РґСЂРѕР±РµР№, РѕСЃРЅРѕРІР°РЅРЅСѓСЋ РЅР° РїСЂРёРІРµРґРµРЅРёРё СЃР»Р°РіР°РµРјС‹С… Рє РѕР±С‰РµРјСѓ Р·РЅР°РјРµРЅР°С‚РµР»СЋ
 Rational operator + (const Rational& lhs, const Rational& rhs) {
-    return {
-        lhs.Numerator() * rhs.Denominator() + rhs.Numerator() * lhs.Denominator(),
-        lhs.Denominator() * rhs.Denominator()
-    };
+  return {
+      lhs.Numerator() * rhs.Denominator() + rhs.Numerator() * lhs.Denominator(),
+      lhs.Denominator() * rhs.Denominator()
+  };
 }
 
-// вычитание реализуем аналогично сложению
-// дублирования кода можно было избежать, определив для класса Rational операцию унарного минуса: тогда разность lhs и rhs можно было бы вычислить           как lhs + (-rhs)
+// РІС‹С‡РёС‚Р°РЅРёРµ СЂРµР°Р»РёР·СѓРµРј Р°РЅР°Р»РѕРіРёС‡РЅРѕ СЃР»РѕР¶РµРЅРёСЋ
+// РґСѓР±Р»РёСЂРѕРІР°РЅРёСЏ РєРѕРґР° РјРѕР¶РЅРѕ Р±С‹Р»Рѕ РёР·Р±РµР¶Р°С‚СЊ, РѕРїСЂРµРґРµР»РёРІ РґР»СЏ РєР»Р°СЃСЃР° Rational РѕРїРµСЂР°С†РёСЋ СѓРЅР°СЂРЅРѕРіРѕ РјРёРЅСѓСЃР°: С‚РѕРіРґР° СЂР°Р·РЅРѕСЃС‚СЊ lhs Рё rhs РјРѕР¶РЅРѕ Р±С‹Р»Рѕ Р±С‹ РІС‹С‡РёСЃР»РёС‚СЊ           РєР°Рє lhs + (-rhs)
 Rational operator - (const Rational& lhs, const Rational& rhs) {
-    return {
-        lhs.Numerator() * rhs.Denominator() - rhs.Numerator() * lhs.Denominator(),
-        lhs.Denominator() * rhs.Denominator()
-    };
+  return {
+      lhs.Numerator() * rhs.Denominator() - rhs.Numerator() * lhs.Denominator(),
+      lhs.Denominator() * rhs.Denominator()
+  };
 }
 
 Rational operator * (const Rational& lhs, const Rational& rhs) {
-    return {
-        lhs.Numerator() * rhs.Numerator(),
-        lhs.Denominator() * rhs.Denominator()
-    };
+  return {
+      lhs.Numerator() * rhs.Numerator(),
+      lhs.Denominator() * rhs.Denominator()
+  };
 }
 
-// деление равносильно умножению на обратную («перевёрнутую») дробь
+// РґРµР»РµРЅРёРµ СЂР°РІРЅРѕСЃРёР»СЊРЅРѕ СѓРјРЅРѕР¶РµРЅРёСЋ РЅР° РѕР±СЂР°С‚РЅСѓСЋ (В«РїРµСЂРµРІС‘СЂРЅСѓС‚СѓСЋВ») РґСЂРѕР±СЊ
 Rational operator / (const Rational& lhs, const Rational& rhs) {
-    return lhs * Rational(rhs.Denominator(), rhs.Numerator());
+  return lhs * Rational(rhs.Denominator(), rhs.Numerator());
 }
 
 istream& operator >> (istream& is, Rational& r) {
-    int n, d;
-    char c;
+  int n, d;
+  char c;
 
-    if (is) {
-        is >> n >> c >> d;
-        if (is) {
-            if (c == '/') {
-                r = Rational(n, d);
-            }
-            else {
-                is.setstate(ios_base::failbit);
-            }
-        }
-    }
+  if (is) {
+      is >> n >> c >> d;
+      if (is) {
+          if (c == '/') {
+              r = Rational(n, d);
+          }
+          else {
+              is.setstate(ios_base::failbit);
+          }
+      }
+  }
 
-    return is;
+  return is;
 }
 
 ostream& operator << (ostream& os, const Rational& r) {
-    return os << r.Numerator() << '/' << r.Denominator();
+  return os << r.Numerator() << '/' << r.Denominator();
 }
 
-// чтобы сравнить lhs с rhs, сравним их разность с нулём, что равносильно сравнению с нулём числителя
+// С‡С‚РѕР±С‹ СЃСЂР°РІРЅРёС‚СЊ lhs СЃ rhs, СЃСЂР°РІРЅРёРј РёС… СЂР°Р·РЅРѕСЃС‚СЊ СЃ РЅСѓР»С‘Рј, С‡С‚Рѕ СЂР°РІРЅРѕСЃРёР»СЊРЅРѕ СЃСЂР°РІРЅРµРЅРёСЋ СЃ РЅСѓР»С‘Рј С‡РёСЃР»РёС‚РµР»СЏ
 bool operator < (const Rational& lhs, const Rational& rhs) {
-    return (lhs - rhs).Numerator() < 0;
+  return (lhs - rhs).Numerator() < 0;
 }
