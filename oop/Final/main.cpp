@@ -8,85 +8,44 @@
 #include <sstream>
 #include <exception>
 using namespace std;
-void check(stringstream& stream, int& value, const string& fail) {
-    if (stream.peek() > 47 && stream.peek() < 58)
-        stream >> value;
-    else if (stream.peek() == '+') {
-        stream.ignore(1);
-        if (stream.peek() > 47 && stream.peek() < 58)
-            stream >> value;
-        else
-            throw invalid_argument(fail);
-    }
-    else if (stream.peek() == '-') {
-        stream.ignore(1);
-        if (stream.peek() > 47 && stream.peek() < 58) {
-            stream >> value;
-            value *= -1;
-        }
-        else
-            throw invalid_argument(fail);
-    }
-    else
-        throw invalid_argument(fail);
-}
 
 class Date {
 public:
-    Date() {
-        this->year = 0;
-        this->month = 0;
-        this->day = 0;
-    }
-    explicit Date(int day, int month, int year) {
-        this->year = year;
-        this->month = month;
-        this->day = day;
-    }
-    explicit Date(const string& data) {
+    Date(const string& data) {
         stringstream stream(data);
         int year, month, day;
-        string fail = "Wrong date format: " + data;
+        bool pass = true;
 
-        check(stream, year, fail);
+        pass = pass && (stream >> year);
+        pass = pass && (stream.peek() == '-');
+        stream.ignore(1);
 
-        if (stream.peek() == '-')
-            stream.ignore(1);
-        else
-            throw invalid_argument(fail);
+        pass = pass && (stream >> month);
+        pass = pass && (stream.peek() == '-');
+        stream.ignore(1);
 
-        check(stream, month, fail);
+        pass = pass && (stream >> day);
+        pass = pass && stream.eof();
 
-
-        if (stream.peek() == '-')
-            stream.ignore(1);
-        else
-            throw invalid_argument(fail);
-
-
-        check(stream, day, fail);
-
-        if (!stream.eof())
-            throw invalid_argument(fail);
-
-        if (stream.eof()) {
-            if (month < 1 || month > 12)
-                throw invalid_argument("Month value is invalid: " + to_string(month));
-            else if (day < 1 || day > 31)
-                throw invalid_argument("Day value is invalid: " + to_string(day));
-            else {
-                this->year = year;
-                this->month = month;
-                this->day = day;
-            }
+        if (!pass) 
+            throw logic_error("Wrong date format: " + data);
+  
+        if (month < 1 || month > 12)
+            throw invalid_argument("Month value is invalid: " + to_string(month));
+        else if (day < 1 || day > 31)
+            throw invalid_argument("Day value is invalid: " + to_string(day));
+        else 
+        {
+            this->year = year;
+            this->month = month;
+            this->day = day;
         }
-
-
+        
     }
     int GetYear() const { return year; };
     int GetMonth() const { return month; };
     int GetDay() const { return day; };
-
+    
 private:
     int year;
     int month;
@@ -102,16 +61,6 @@ bool operator<(const Date& lhs, const Date& rhs) {
     }
     return lhs.GetYear() < rhs.GetYear();
 }
-istream& operator>>(istream& stream, Date& date) {
-    int year, month, day;
-    stream >> year;
-    stream.ignore(1);
-    stream >> month;
-    stream.ignore(1);
-    stream >> day;
-    date = Date(day, month, year);
-    return stream;
-}
 ostream& operator<<(ostream& stream, const Date& date) {
     stream << setfill('0');
     stream << setw(4) << date.GetYear() << '-';
@@ -119,8 +68,6 @@ ostream& operator<<(ostream& stream, const Date& date) {
     stream << setw(2) << date.GetDay();
     return stream;
 }
-
-
 class Database {
 public:
     void AddEvent(const Date& date, const string& event) {
@@ -144,13 +91,11 @@ public:
         }
         else cout << "Deleted 0 events" << endl;
     }
-
     void Find(const Date& date) const {
         if (data.find(date) != data.end())
             for (const auto item : data.at(date))
                 cout << item << endl;
     }
-
     void Print() const {
         for (const auto item : data) {
             for (const auto i : item.second) {
@@ -158,7 +103,6 @@ public:
             }
         }
     }
-
 private:
     map<Date, set<string>> data;
 };
@@ -191,20 +135,14 @@ int main() {
                     db.DeleteDate(date);
             }
             else if (operation == "Find") {
-
-
                 string data(first + 1, command.end());
-
                 Date date(data);
                 db.Find(date);
-
-
             }
             else if (operation == "Print") {
-
                 db.Print();
             }
-            else if (operation != "Add" && operation != "Del" && operation != "Find" && operation != "Print" && operation != "")
+            else if (!command.empty())
                 cout << "Unknown command: " << operation << endl;
         }
         catch (exception& ex) {
@@ -212,6 +150,5 @@ int main() {
             break;
         }
     }
-
     return 0;
 }
