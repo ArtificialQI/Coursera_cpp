@@ -7,7 +7,7 @@ bool IsPalindrom(std::string str)
     str.erase(std::remove(str.begin(), str.end(), ' '), str.end());
     int count = 0;
     for(int i = 0; i < str.size() / 2; ++i)
-        if(str[i] == tolower(str[str.size() - i - 1]))
+        if(tolower(str[i]) == tolower(str[str.size() - i - 1]))
             ++count;
 
     return (str.size() / 2 == count);

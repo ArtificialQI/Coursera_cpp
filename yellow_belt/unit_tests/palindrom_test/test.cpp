@@ -5,7 +5,7 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
-
+#include <algorithm>
 using namespace std;
 
 template <class T>
@@ -93,14 +93,38 @@ private:
   int fail_count = 0;
 };
 
-int GetDistinctRealRootCount(double a, double b, double c) {
-  // Вы можете вставлять сюда различные реализации функции,
-  // чтобы проверить, что ваши тесты пропускают корректный код
-  // и ловят некорректный
+bool IsPalindrom(std::string str)
+{
+    int count = 0;
+    for(size_t i = 0; i < str.size() / 2; ++i)
+        if(str[i] == str[str.size() - i - 1])
+            ++count;
+
+    return (count == str.size() / 2);
+}
+
+void TestIsPalindrom() {
+  Assert(IsPalindrom(""), "empty string is a palindrome");
+  Assert(IsPalindrom("a"), "one letter string is a palindrome");
+  Assert(IsPalindrom("abba"), "abba is a palindrome");
+  Assert(IsPalindrom("abXba"), "abXba is a palindrome");
+  Assert(IsPalindrom("a b X b a"), "`a b X b a` is a palindrome");
+  Assert(IsPalindrom("  ABBA  "), "`  ABBA  ` is a palindrome");
+
+  Assert(!IsPalindrom("XabbaY"), "XabbaY is not a palindrome");
+  Assert(!IsPalindrom("abXYba"), "abXYba is not a palindrome");
+  Assert(!IsPalindrom("Xabba"), "Xabba is not a palindrome");
+  Assert(!IsPalindrom("abbaX"), "abbaX is not a palindrome");
+  Assert(
+    !IsPalindrom("was it a car or a cat i saw"),
+    "`was it a car or a cat i saw` is not a palindrome because spaces do not match"
+  );
+  Assert(!IsPalindrom("ABBA   "), "`ABBA   ` is not a palindrome");
+  Assert(!IsPalindrom("  ABBA"), "`  ABBA` is not a palindrome");
 }
 
 int main() {
   TestRunner runner;
-  // добавьте сюда свои тесты
+  runner.RunTest(TestIsPalindrom, "TestIsPalindrom");
   return 0;
 }
