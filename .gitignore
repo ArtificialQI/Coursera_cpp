@@ -1,2 +1,5 @@
 /.vscode
 /build
+CMakeLists.txt
+header.cpp
+header.h
