@@ -5,22 +5,13 @@
 using namespace std;
 
 // если имя неизвестно, возвращает пустую строку
-string FindNameByYear (const map<int, string>& names, int year) {
-    string name;  // изначально имя неизвестно
-
-    // перебираем всю историю по возрастанию ключа словаря, то есть в хронологическом порядке
-    for (const auto& item : names) {
-        // если очередной год не больше данного, обновляем имя
-        if (item.first <= year) {
-            name = item.second;
-        }
-        else {
-            // иначе пора остановиться, так как эта запись и все последующие относятся к будущему
-            break;
-        }
-    }
-
-    return name;
+string FindNameByYear(const map<int, string>& names, int year) {
+  auto iter_after = names.upper_bound(year);
+  string name;
+  if (iter_after != names.begin()) {
+    name = (--iter_after)->second;
+  }
+  return name;
 }
 string GetNameStoryByYear (const map<int, string>& names, int year) {
     vector<string> story;
@@ -30,10 +21,9 @@ string GetNameStoryByYear (const map<int, string>& names, int year) {
     --it;
     auto data = *it;
     //строим вектор имен
-    for (; it != names.end(); --it)
-    {
-        auto f = *it;
-        story.push_back(f.second);
+    for (; it != names.end(); --it) {
+        auto found = *it;
+        story.push_back(found.second);
         if (it == names.begin())
             break;
     }

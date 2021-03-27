@@ -14,7 +14,7 @@ void PrintVectorPart(const vector<int>& numbers) {
 int main() {
 	PrintVectorPart({ 6, 1, 8, -5, 4 });
 	cout << endl;
-	PrintVectorPart({ -6, 1, 8, -5, 4 });  // ничего не выведется
+	PrintVectorPart({ -6, 1, 8, -5, 4 }); // empty vector
 	cout << endl;
 	PrintVectorPart({ 6, 1, 8, 5, 4 });
 	cout << endl;
