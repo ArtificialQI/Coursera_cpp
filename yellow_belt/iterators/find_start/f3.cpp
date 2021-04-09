@@ -6,21 +6,21 @@
 template <typename RandomIt>
 pair<RandomIt, RandomIt> FindStartsWith(
     RandomIt range_begin, RandomIt range_end, char prefix) {
-
-    // Все строки, начинающиеся с '<prefix>', больше или равны строке "<prefix>"
-    auto left = lower_bound(range_begin, range_end, string(1, prefix));
-
-    // Составим следующий в алфавите символ.
-    // Не страшно, если prefix = 'z':
-    // в этом случае мы получим следующий за 'z' символ в таблице символов
-    char next_prefix = static_cast<char>(prefix + 1);
-
-    // Строка "<next_prefix>" в рамках буквенных строк
-    // является точной верхней гранью
-    // множества строк, начнающихся с '<prefix>'
-    auto right = lower_bound(range_begin, range_end, string(1, next_prefix));
-
-    return { left, right };
+      
+  // Р’СЃРµ СЃС‚СЂРѕРєРё, РЅР°С‡РёРЅР°СЋС‰РёРµСЃСЏ СЃ '<prefix>', Р±РѕР»СЊС€Рµ РёР»Рё СЂР°РІРЅС‹ СЃС‚СЂРѕРєРµ "<prefix>"
+  auto left = lower_bound(range_begin, range_end, string(1, prefix));
+  
+  // РЎРѕСЃС‚Р°РІРёРј СЃР»РµРґСѓСЋС‰РёР№ РІ Р°Р»С„Р°РІРёС‚Рµ СЃРёРјРІРѕР».
+  // РќРµ СЃС‚СЂР°С€РЅРѕ, РµСЃР»Рё prefix = 'z':
+  // РІ СЌС‚РѕРј СЃР»СѓС‡Р°Рµ РјС‹ РїРѕР»СѓС‡РёРј СЃР»РµРґСѓСЋС‰РёР№ Р·Р° 'z' СЃРёРјРІРѕР» РІ С‚Р°Р±Р»РёС†Рµ СЃРёРјРІРѕР»РѕРІ
+  char next_prefix = static_cast<char>(prefix + 1);
+  
+  // РЎС‚СЂРѕРєР° "<next_prefix>" РІ СЂР°РјРєР°С… Р±СѓРєРІРµРЅРЅС‹С… СЃС‚СЂРѕРє
+  // СЏРІР»СЏРµС‚СЃСЏ С‚РѕС‡РЅРѕР№ РІРµСЂС…РЅРµР№ РіСЂР°РЅСЊСЋ
+  // РјРЅРѕР¶РµСЃС‚РІР° СЃС‚СЂРѕРє, РЅР°С‡РЅР°СЋС‰РёС…СЃСЏ СЃ '<prefix>'
+  auto right = lower_bound(range_begin, range_end, string(1, next_prefix));
+  
+  return {left, right};
 }
 
 #include <algorithm>
@@ -30,19 +30,19 @@ pair<RandomIt, RandomIt> FindStartsWith(
 
 template <typename RandomIt>
 pair<RandomIt, RandomIt> FindStartsWith(
-    RandomIt range_begin, RandomIt range_end, string prefix) {
-
-    // Все строки, начинающиеся с prefix, больше или равны строке "<prefix>"
-    auto left = lower_bound(range_begin, range_end, prefix);
-
-    // Составим строку, которая в рамках буквенных строк является
-    // точной верхней гранью множества строк, начинающихся с prefix
-    string upper_bound = prefix;
-    ++upper_bound[upper_bound.size() - 1];
-
-    // Первое встреченное слово, не меньшее upper_bound,
-    // обязательно является концом полуинтервала
-    auto right = lower_bound(range_begin, range_end, upper_bound);
-
-    return { left, right };
+	RandomIt range_begin, RandomIt range_end, string prefix) {
+	
+  // Р’СЃРµ СЃС‚СЂРѕРєРё, РЅР°С‡РёРЅР°СЋС‰РёРµСЃСЏ СЃ prefix, Р±РѕР»СЊС€Рµ РёР»Рё СЂР°РІРЅС‹ СЃС‚СЂРѕРєРµ "<prefix>"
+  auto left = lower_bound(range_begin, range_end, prefix);
+  
+  // РЎРѕСЃС‚Р°РІРёРј СЃС‚СЂРѕРєСѓ, РєРѕС‚РѕСЂР°СЏ РІ СЂР°РјРєР°С… Р±СѓРєРІРµРЅРЅС‹С… СЃС‚СЂРѕРє СЏРІР»СЏРµС‚СЃСЏ
+  // С‚РѕС‡РЅРѕР№ РІРµСЂС…РЅРµР№ РіСЂР°РЅСЊСЋ РјРЅРѕР¶РµСЃС‚РІР° СЃС‚СЂРѕРє, РЅР°С‡РёРЅР°СЋС‰РёС…СЃСЏ СЃ prefix
+  string upper_bound = prefix;
+  ++upper_bound[upper_bound.size() - 1];
+  
+  // РџРµСЂРІРѕРµ РІСЃС‚СЂРµС‡РµРЅРЅРѕРµ СЃР»РѕРІРѕ, РЅРµ РјРµРЅСЊС€РµРµ upper_bound,
+  // РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ СЏРІР»СЏРµС‚СЃСЏ РєРѕРЅС†РѕРј РїРѕР»СѓРёРЅС‚РµСЂРІР°Р»Р°
+  auto right = lower_bound(range_begin, range_end, upper_bound);
+  
+  return {left, right};
 }
