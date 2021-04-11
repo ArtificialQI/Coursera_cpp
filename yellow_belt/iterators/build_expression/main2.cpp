@@ -1,44 +1,51 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <deque>
 using namespace std;
 
 int main() {
 
 	int first, N;
 	cin >> first >> N;
-	string expression = to_string(first);
-	string prev_operation;
+	deque<string> expression;
+	vector<string> operations{""};
+	expression.push_back(to_string(first));
 	for (size_t i = 0; i < N; ++i) {
-
 		string operation;
 		int operand;
 		cin >> operation >> operand;
 		switch (operation[0]) {
 		case '+':
-			expression += " " + operation + " " + to_string(operand);
+			expression.push_back(" " + operation + " " + to_string(operand));
 			break;
 		case '-':
-			expression += " " + operation + " " + to_string(operand);
+			expression.push_back(" " + operation + " " + to_string(operand));
 			break;
 		case '*':
-			if (prev_operation == "+" || prev_operation == "-")
-				expression = + "(" + expression + ") " + operation + " " + to_string(operand);
+			if (operations.back() == "+" || operations.back() == "-") {
+				expression.push_back(") " + operation + " " + to_string(operand));
+				expression.push_front("(");
+			}
 			else
-				expression += " " + operation + " " + to_string(operand);
+				expression.push_back(" " + operation + " " + to_string(operand));
 			break;
 		case '/':
-			if (prev_operation == "+" || prev_operation == "-")
-				expression = + "(" + expression + ") " + operation + " " + to_string(operand);
+			if (operations.back() == "+" || operations.back() == "-") {
+				expression.push_back(") " + operation + " " + to_string(operand));
+				expression.push_front("(");
+			}
 			else
-				expression += " " + operation + " " + to_string(operand);
+				expression.push_back(" " + operation + " " + to_string(operand));
 			break;
 		default:
 			break;
 		}
-		prev_operation = operation;
+
+		operations.push_back(operation);
 	}
-	cout << expression << endl;
+	for (auto item : expression)
+		cout << item;
 
 	return 0;
 }

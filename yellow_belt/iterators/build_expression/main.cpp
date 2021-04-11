@@ -1,26 +1,23 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <deque>
 using namespace std;
 
 int main() {
-
+	deque<string> expression;
 	int first, N;
 	cin >> first >> N;
-	if (N == 0) {
-		cout << to_string(first) << endl;
-		return 0;
-	}
-	string expression(N - 1, '(');
-	expression += "(" + to_string(first) + ")";
+	expression.emplace_back(to_string(first));
 	for (size_t i = 0; i < N; ++i) {
 		string operation;
 		int operand;
 		cin >> operation >> operand;
-		expression += " " + operation + " " + to_string(operand) + ")";
+		expression.emplace_back(")");
+		expression.emplace_back(" " + operation + " " + to_string(operand));
+		expression.emplace_front("(");
 	}
-	expression.pop_back();
-	cout << expression << endl;
-
+	for (auto item : expression)
+		cout << item;
 	return 0;
 }
