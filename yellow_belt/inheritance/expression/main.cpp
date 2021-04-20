@@ -35,14 +35,7 @@ private:
 };
 
 struct Op : public Node {
-  Op(char value): precedence([value] {
-          if (value == '*') {
-            return 2;
-          } else {
-            return 1;
-          }
-        }()),
-        _op(value) {}
+  Op(char value): precedence([value] {if (value == '*') {return 2;} else {return 1;}}()), _op(value) {}
 
   const uint8_t precedence;
 
