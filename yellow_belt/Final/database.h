@@ -20,6 +20,9 @@ public:
 
     void Print(ostream&) const;
 
+    int RemoveIf(const Date date, char pred) {
+        if date/event pred  date/event
+    }
 private:
     map<Date, set<string>> storage;
 };

@@ -104,9 +104,7 @@ shared_ptr<Node> ParseExpression(It& current, It end, unsigned precedence) {
 
         ++current; // consume op
 
-        left = make_shared<LogicalOperationNode>(
-            logical_operation, left, ParseExpression(current, end, current_precedence)
-            );
+        left = make_shared<LogicalOperationNode>(logical_operation, left, ParseExpression(current, end, current_precedence));
     }
 
     return left;
