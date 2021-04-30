@@ -20,8 +20,11 @@ public:
 
     void Print(ostream&) const;
 
-    int RemoveIf(const Date date, char pred) {
-        if date/event pred  date/event
+    template<class Function>
+    int RemoveIf(Function predicate) {
+        for (auto [key, value] : storage) {
+            if (predicate(storage))
+        }       storage.erase();
     }
 private:
     map<Date, set<string>> storage;

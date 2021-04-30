@@ -59,3 +59,7 @@ ostream& operator<<(ostream& stream, const Date& date) {
     stream << setw(2) << date.GetDay();
     return stream;
 }
+
+bool operator==(const Date& lhs, const Date& rhs) {
+    return (lhs.GetDay() == rhs.GetDay() && lhs.GetMonth() == rhs.GetMonth() && lhs.GetYear() == rhs.GetYear());
+}

@@ -1,22 +1,24 @@
 #include "node.h"
 
-int EmptyNode::Evaluate(const Date& date, const string& event) const
+bool EmptyNode::Evaluate(const Date& date, const string& event) const
 {
 	return 0;
 }
-
-int DateComparisonNode::Evaluate(const Date& date, const string& event) const
+template <class Function>
+Function DateComparisonNode::Evaluate(const Date& date, const string& event) const
 {	
 	
 	return 0;
 }
 
-int EventComparisonNode::Evaluate(const Date& date, const string& event) const
+template <class Function>
+Function EventComparisonNode::Evaluate(const Date& date, const string& event) const
 {
 	return 0;
 }
 
-int LogicalOperationNode::Evaluate(const Date& date, const string& event) const
+template <class Function>
+Function LogicalOperationNode::Evaluate(const Date& date, const string& event) const
 {
 	return 0;
 }

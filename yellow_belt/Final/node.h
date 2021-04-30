@@ -2,6 +2,9 @@
 
 #include "date.h"
 
+#include <string>
+#include <set>
+
 enum class Comparison {
 	Less,
 	LessOrEqual,
@@ -18,20 +21,25 @@ enum class LogicalOperation {
 };
 class Node {
 public:
-	virtual int Evaluate(const Date& date, const string& event) const = 0;
+	virtual bool Evaluate(const Date& date, const string& event) const = 0;
 };
-
+ 
 class EmptyNode : public Node {
 public:
-	int Evaluate(const Date& date, const string& event) const override;
+	bool Evaluate(const Date& date, const string& event) const override;
 };
 
 class DateComparisonNode : public Node {
 public:
 	DateComparisonNode(Comparison& cmp, Date& date) : cmp_(cmp), date_(date) {}
-	int Evaluate(const Date& date, const string& event) const override {
-		return 
-	}
+	template<class Function>
+	Function Evaluate(const Date& date_, const string& event) const override {
+		auto predicate = [date_, event](map<Date, set<string>> storage){
+			for (auto [key, value] : storage)
+				return (key == date_);
+		};
+		return predicate;
+	} 
 private:
 	const Comparison cmp_;
 	const Date date_;
@@ -40,7 +48,8 @@ private:
 class EventComparisonNode : public Node {
 public:
 	EventComparisonNode(const Comparison& cmp, const string& value) : cmp_(cmp), value_(value) {}
-	int Evaluate(const Date& date, const string& event) const override;
+	template<class Function>
+	Function Evaluate(const Date& date, const string& event) const override;
 private:
 	const Comparison cmp_;
 	const string value_;
@@ -48,5 +57,13 @@ private:
 
 class LogicalOperationNode : public Node {
 public:
-	int Evaluate(const Date& date, const string& event) const override;
+	LogicalOperationNode(LogicalOperation log, shared_ptr<Node> left, shared_ptr<Node> right) : log_(log), left_(left), right_(right) {}
+	template<class Function>
+	Function Evaluate(const Date& date, const string& event) const override {
+		return Evaluate(left_) log_ Evaluate(right_);
+	}
+private:
+	LogicalOperation log_;
+	shared_ptr<Node> left_;
+	shared_ptr<Node> right_;
 };
