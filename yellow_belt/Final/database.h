@@ -24,7 +24,7 @@ public:
     int RemoveIf(Function predicate) {
         for (auto [key, value] : storage) {
             if (predicate(storage))
-        }       storage.erase();
+        }       storage.at(key).clear();
     }
 private:
     map<Date, set<string>> storage;
