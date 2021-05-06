@@ -5,6 +5,8 @@
 #include <string>
 #include <set>
 #include <utility>
+#include <memory>
+#include <vector>
 
 enum class Comparison {
 	Less,
@@ -38,26 +40,30 @@ public:
 		pair<RandomIt, RandomIt> predicate = [date_, event](map<Date, set<string>> storage) {
 			auto begin = storage.begin();
 			auto end = storage.end();
+			auto lower = storage.lower_bound(date_);
+			auto upper = storage.upper_bound(date_);
+			auto find_ = find(date_);
 			switch (cmp_) {
 			case Comparison::Less:
-				auto lower = storage.lower_bound(date_);
 				return {begin, --lower};
 				break;
 			case Comparison::LessOrEqual:
-			auto lower = storage.lower_bound(date_);
 				return {begin, lower};
 				break;
 			case Comparison::Greater:
-				/* code */
+				return {upper, --end};
 				break;
 			case Comparison::GreaterOrEqual:
-				/* code */
+				return {lower, --end};
 				break;
 			case Comparison::Equal:
-				/* code */
+				return {find_, find_};
 				break;
 			case Comparison::NotEqual:
-				/* code */
+				if (find_ = end)
+					return {begin, --end}
+				storage.erase(find_);
+				return {begin, --end};
 				break;
 			default:
 				break;
@@ -72,12 +78,38 @@ private:
 
 class EventComparisonNode : public Node {
 public:
-	EventComparisonNode(const Comparison& cmp, const string& value) : cmp_(cmp), value_(value) {}
-	template<class Function>
-	Function Evaluate(const Date& date, const string& event) const override;
+	EventComparisonNode(const Comparison& cmp, const string& event) : cmp_(cmp), event_(event) {}
+	template<class RandomIt>
+	pair<RandomIt, RandomIt> Evaluate(const Date& date, const string& event_) const override {
+		pair<RandomIt, RandomIt> predicate = [date, event_](map<Date, set<string>> storage) {
+			auto begin = storage.begin();
+			auto end = storage.end();
+
+			switch (cmp_) {
+			case Comparison::Less:
+				for (auto [key, value] : storage)
+					if (value.count(event_) > 0)
+				break;
+			case Comparison::LessOrEqual:
+				break;
+			case Comparison::Greater:
+				break;
+			case Comparison::GreaterOrEqual:
+				break;
+			case Comparison::Equal:
+
+				break;
+			case Comparison::NotEqual:
+				break;
+			default:
+				break;
+			}
+		};
+		return predicate;
+	} 
 private:
 	const Comparison cmp_;
-	const string value_;
+	const string event_;
 };
 
 class LogicalOperationNode : public Node {
@@ -85,8 +117,19 @@ public:
 	LogicalOperationNode(LogicalOperation log, shared_ptr<Node> left, shared_ptr<Node> right) : log_(log), left_(left), right_(right) {}
 	template<class Function>
 	Function Evaluate(const Date& date, const string& event) const override {
-		return Evaluate(left_) log_ Evaluate(right_); // переделать под итераторы
-		// (first, second) && (third, fourth);
+
+		switch (log_)
+		{
+		case LogicalOperation::And:
+			/* code */
+			break;
+		case LogicalOperation::Or:
+
+			break;
+		
+		default:
+			break;
+		}
 	}
 private:
 	LogicalOperation log_;
