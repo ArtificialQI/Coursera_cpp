@@ -2,9 +2,11 @@
 
 #include "date.h"
 
+#include <vector>
 #include <string>
 #include <set>
 #include <map>
+#include <functional>
 
 using namespace std;
 
@@ -20,12 +22,13 @@ public:
 
     void Print(ostream&) const;
 
-    template<class Function>
-    int RemoveIf(Function predicate) {
-        for (auto [key, value] : storage) {
-            if (predicate(storage))
-        }       storage.at(key).clear();
-    }
+    int RemoveIf(const function<bool(const Date& date, const string& event)>& predicate);
+  
+    vector<string> FindIf(const function<bool(const Date& date, const string& event)>& predicate) const;
+
+    string Last(const Date& date) const;
+
 private:
     map<Date, set<string>> storage;
+    map<Date, vector<string>> data;
 };

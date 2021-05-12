@@ -11,7 +11,9 @@
 using namespace std;
 
 string ParseEvent(istream& is) {
-    // implement me
+    string event;
+    getline(is, event);
+    return event;
 }
 
 void TestAll();
