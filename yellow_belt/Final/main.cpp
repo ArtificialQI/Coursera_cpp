@@ -7,11 +7,13 @@
 #include <iostream>
 #include <stdexcept>
 #include <vector>
+#include <sstream>
 
 using namespace std;
 
 string ParseEvent(istream& is) {
     string event;
+    is.ignore(1);
     getline(is, event);
     return event;
 }

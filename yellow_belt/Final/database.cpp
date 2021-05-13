@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 
 void Database::Add(const Date& date, const string& event) {
     storage[date].insert(event);
@@ -45,15 +46,24 @@ void Database::Print(ostream& stream) const {
     }
 }
 
-int Database::RemoveIf(const function<bool(const Date& date, const string& event)>& predicate) {
-    size_t count = 0;
-    for (const auto& [date, events] : storage) {
-        for (const auto& event : events) {
-            if (predicate(date, event)) {
-                storage[date].erase(event);
+int Database::RemoveIf(const function<bool(const Date& date_, const string& event_)>& predicate) {
+    int count = 0;
+    for (auto first = data.begin(); first != data.end();) {
+        auto point = stable_partition(first->second.begin(), first->second.end(), [&](const string& item) {return !predicate(first->first, item); });
+
+        for (const auto& item : first->second) {
+            if (predicate(first->first, item)) {
+                storage[first->first].erase(item);
                 ++count;
             }
         }
+        first->second.erase(point, first->second.end());
+        if (data.at(first->first).empty()) {
+            storage.erase(first->first);
+            first = data.erase(first);
+        }
+        else
+            ++first;
     }
     return count;
 }
@@ -76,5 +86,7 @@ string Database::Last(const Date& date) const {
     auto it = --storage.upper_bound(date);
     if (it == storage.end())
         throw invalid_argument("invalid_argument");
-    return data.at(it->first).back();
+    ostringstream out;
+    out << it->first;
+    return out.str() + ' ' + data.at(it->first).back();
 }
