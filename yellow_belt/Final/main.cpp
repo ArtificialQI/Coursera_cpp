@@ -26,10 +26,6 @@ int main() {
     TestAll();
 
     Database db;
-    Date fck_date(2020, 01, 01);
-    auto omg = make_shared<EventComparisonNode>(Comparison::LessOrEqual, "wtf");
-    auto omfg = make_shared<DateComparisonNode>(Comparison::LessOrEqual, fck_date);
-    LogicalOperationNode(LogicalOperation::And, omg, omfg);
 
     for (string line; getline(cin, line); ) {
         istringstream is(line);
