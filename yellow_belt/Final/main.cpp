@@ -1,19 +1,23 @@
+#include "test_runner.h"
 #include "database.h"
 #include "date.h"
-#include "condition_parser.h"
 #include "node.h"
-#include "test_runner.h"
+#include "condition_parser.h"
 
 #include <iostream>
 #include <stdexcept>
 #include <vector>
 #include <sstream>
 
+#include <memory>
+
+
 using namespace std;
 
 string ParseEvent(istream& is) {
     string event;
-    is.ignore(1);
+    while (is.peek() == ' ')
+        is.ignore(1);
     getline(is, event);
     return event;
 }
@@ -24,6 +28,10 @@ int main() {
     TestAll();
 
     Database db;
+    Date fck_date(2020, 01, 01);
+    const auto omg = make_shared<EventComparisonNode>(Comparison::LessOrEqual, "wtf");
+    const auto omfg = make_shared<DateComparisonNode>(Comparison::LessOrEqual, fck_date);
+    LogicalOperationNode(Comparison::LessOrEqual, omg, omfg);
 
     for (string line; getline(cin, line); ) {
         istringstream is(line);
