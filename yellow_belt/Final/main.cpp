@@ -9,8 +9,6 @@
 #include <vector>
 #include <sstream>
 
-#include <memory>
-
 
 using namespace std;
 
@@ -29,9 +27,9 @@ int main() {
 
     Database db;
     Date fck_date(2020, 01, 01);
-    const auto omg = make_shared<EventComparisonNode>(Comparison::LessOrEqual, "wtf");
-    const auto omfg = make_shared<DateComparisonNode>(Comparison::LessOrEqual, fck_date);
-    LogicalOperationNode(Comparison::LessOrEqual, omg, omfg);
+    auto omg = make_shared<EventComparisonNode>(Comparison::LessOrEqual, "wtf");
+    auto omfg = make_shared<DateComparisonNode>(Comparison::LessOrEqual, fck_date);
+    LogicalOperationNode(LogicalOperation::And, omg, omfg);
 
     for (string line; getline(cin, line); ) {
         istringstream is(line);
