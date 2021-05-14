@@ -28,17 +28,17 @@ EventComparisonNode::EventComparisonNode(const Comparison& cmp, const string& ev
 bool EventComparisonNode::Evaluate(const Date& date, const string& event) const {
 	switch (cmp_) {
 		case Comparison::Less:
-			return event_ < event;
+			return event < event_;
 		case Comparison::LessOrEqual:
-			return event_ <= event;
+			return event <= event_;
 		case Comparison::Greater:
-			return event_ > event;
+			return event > event_;
 		case Comparison::GreaterOrEqual:
-			return event_ >= event;
+			return event >= event_;
 		case Comparison::Equal:
-			return event_ == event;
+			return event == event_;
 		case Comparison::NotEqual:
-			return event_ != event;
+			return event != event_;
 		default:
 			break;
 	}
