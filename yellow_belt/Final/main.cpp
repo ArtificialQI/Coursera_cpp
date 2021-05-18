@@ -4,7 +4,6 @@
 #include "node.h"
 #include "condition_parser.h"
 //#include "condition_parser_test.cpp"
-//#include "test_runner.h"
 
 #include <iostream>
 #include <stdexcept>
@@ -98,9 +97,10 @@ int main() {
         AssertEqual(events, vector<string>{"first event  ", "second event"}, "Parse multiple events");
     }
 }
+*/
 
-void TestAll() {
+/* void TestAll() {
     TestRunner tr;
     tr.RunTest(TestParseEvent, "TestParseEvent");
     tr.RunTest(TestParseCondition, "TestParseCondition");
-}  */
+}   */
