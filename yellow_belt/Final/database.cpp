@@ -6,8 +6,10 @@
 #include <algorithm>
 
 void Database::Add(const Date& date, const string& event) {
+    if (storage[date].count(event) == 0)
+        data[date].emplace_back(event);
+        
     storage[date].insert(event);
-    data[date].emplace_back(event);
 }
 
 bool Database::DeleteEvent(const Date& date, const string& event) {

@@ -3,10 +3,14 @@
 #include <stdexcept>
 #include <iostream>
 #include <string>
+#include <vector>
 #include <map>
 #include <set>
 
 using namespace std;
+
+template<class T, class U>
+void AssertEqual(const T& t, const U& u, const string& hint);
 
 template<class T, class U>
 void AssertEqual(const T& t, const U& u, const string& hint) {
@@ -74,6 +78,20 @@ ostream& operator<< (ostream& os, const map<K, V>& m) {
         }
         first = false;
         os << kv.first << ": " << kv.second;
+    }
+    return os << "}";
+}
+
+template <class V>
+ostream& operator<< (ostream& os, const vector<V>& v) {
+    os << "{";
+    bool first = true;
+    for (const auto& x : v) {
+        if (!first) {
+            os << ", ";
+        }
+        first = false;
+        os << x;
     }
     return os << "}";
 }

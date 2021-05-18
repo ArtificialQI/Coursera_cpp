@@ -3,6 +3,7 @@
 #include "date.h"
 #include "node.h"
 #include "condition_parser.h"
+//#include "condition_parser_test.cpp"
 //#include "test_runner.h"
 
 #include <iostream>
@@ -21,10 +22,10 @@ string ParseEvent(istream& is) {
     return event;
 }
 
-/* void TestAll(); */
+//void TestAll(); 
 
 int main() {
-    /* TestAll(); */
+    //TestAll(); 
 
     Database db;
 
@@ -80,7 +81,7 @@ int main() {
     return 0;
 }
 
-/* void TestParseEvent() {
+/*  void TestParseEvent() {
     {
         istringstream is("event");
         AssertEqual(ParseEvent(is), "event", "Parse event without leading spaces");
@@ -102,4 +103,4 @@ void TestAll() {
     TestRunner tr;
     tr.RunTest(TestParseEvent, "TestParseEvent");
     tr.RunTest(TestParseCondition, "TestParseCondition");
-} */
+}  */
