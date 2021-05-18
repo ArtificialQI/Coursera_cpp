@@ -1,15 +1,16 @@
-
 #include "database.h"
 #include "date.h"
 #include "node.h"
 #include "condition_parser.h"
-//#include "condition_parser_test.cpp"
+
+#include "condition_parser_test.cpp"
+#include "database_test.cpp"
+#include "test_runner.h"
 
 #include <iostream>
 #include <stdexcept>
 #include <vector>
 #include <sstream>
-
 
 using namespace std;
 
@@ -21,10 +22,10 @@ string ParseEvent(istream& is) {
     return event;
 }
 
-//void TestAll(); 
+void TestAll(); 
 
 int main() {
-    //TestAll(); 
+    TestAll(); 
 
     Database db;
 
@@ -80,7 +81,7 @@ int main() {
     return 0;
 }
 
-/*  void TestParseEvent() {
+  void TestParseEvent() {
     {
         istringstream is("event");
         AssertEqual(ParseEvent(is), "event", "Parse event without leading spaces");
@@ -97,10 +98,11 @@ int main() {
         AssertEqual(events, vector<string>{"first event  ", "second event"}, "Parse multiple events");
     }
 }
-*/
 
-/* void TestAll() {
+
+  void TestAll() {
     TestRunner tr;
     tr.RunTest(TestParseEvent, "TestParseEvent");
     tr.RunTest(TestParseCondition, "TestParseCondition");
-}   */
+    tr.RunTest(TestDatabase, "TestDatabase");
+}    

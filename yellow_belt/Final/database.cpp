@@ -9,7 +9,7 @@ void Database::Add(const Date& date, const string& event) {
     if (storage[date].count(event) == 0)
         data[date].emplace_back(event);
         
-    storage[date].insert(event);
+    storage[date].insert(event); 
 }
 
 bool Database::DeleteEvent(const Date& date, const string& event) {
