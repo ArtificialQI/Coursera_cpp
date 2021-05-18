@@ -83,9 +83,10 @@ vector<string> Database::FindIf(const function<bool(const Date& date, const stri
 }
 
 string Database::Last(const Date& date) const {
-    auto it = --storage.upper_bound(date);
-    if (it == storage.end())
+    auto it = storage.upper_bound(date);
+    if (it == storage.begin())
         throw invalid_argument("invalid_argument");
+    --it;
     ostringstream out;
     out << it->first;
     return out.str() + ' ' + data.at(it->first).back();
