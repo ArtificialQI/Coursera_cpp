@@ -1,5 +1,6 @@
 .vscode
 build
+CMakeFiles
 CMakeLists.txt
 /header.cpp
 /header.h
