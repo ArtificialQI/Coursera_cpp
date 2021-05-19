@@ -41,7 +41,7 @@ set<string> Database::Find(const Date& date) const {
 }
 
 void Database::Print(ostream& stream) const {
-    for (const auto& item : storage) {
+    for (const auto& item : data) {
         for (const string& event : item.second) {
             stream << item.first << " " << event << endl;
         }
@@ -72,7 +72,7 @@ int Database::RemoveIf(const function<bool(const Date& date_, const string& even
 
 vector<string> Database::FindIf(const function<bool(const Date& date, const string& event)>& predicate) const {
     vector<string> entries;
-    for (const auto& [date, events] : storage) {
+    for (const auto& [date, events] : data) {
         for (const auto& event : events) {
             if (predicate(date, event)) {
                 ostringstream out;
@@ -85,8 +85,8 @@ vector<string> Database::FindIf(const function<bool(const Date& date, const stri
 }
 
 string Database::Last(const Date& date) const {
-    auto it = storage.upper_bound(date);
-    if (it == storage.begin())
+    auto it = data.upper_bound(date);
+    if (it == data.begin())
         throw invalid_argument("invalid_argument");
     --it;
     ostringstream out;

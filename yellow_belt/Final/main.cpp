@@ -81,7 +81,7 @@ int main() {
     return 0;
 }
 
-  void TestParseEvent() {
+   void TestParseEvent() {
     {
         istringstream is("event");
         AssertEqual(ParseEvent(is), "event", "Parse event without leading spaces");
@@ -105,4 +105,4 @@ int main() {
     tr.RunTest(TestParseEvent, "TestParseEvent");
     tr.RunTest(TestParseCondition, "TestParseCondition");
     tr.RunTest(TestDatabase, "TestDatabase");
-}    
+}     
