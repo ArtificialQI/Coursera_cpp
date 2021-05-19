@@ -1,4 +1,5 @@
 .vscode
+.gitignore
 build
 CMakeLists.txt
 /header.cpp
