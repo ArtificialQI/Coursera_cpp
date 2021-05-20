@@ -7,7 +7,7 @@
 #include <numeric>
 #include <iterator>
 #include <algorithm>
-
+#include <random>
 using namespace std;
 
 template<typename ForwardIterator, typename UnaryPredicate>
@@ -15,8 +15,11 @@ ForwardIterator max_element_if(ForwardIterator first, ForwardIterator last, Unar
   if (first == last)
     return last;
 
-  while (!pred(*first) && first != last) 
-    ++first;
+  while (first != last) {
+    if (!pred(*first)) 
+      ++first;
+    else break;
+  }
   
   if (first == last)
     return last;
@@ -30,6 +33,21 @@ ForwardIterator max_element_if(ForwardIterator first, ForwardIterator last, Unar
   }
   
   return largest;
+}
+
+#include <algorithm>
+using namespace std;
+
+template <class ForwardIterator, class UnaryPredicate>
+ForwardIterator max_element_if(ForwardIterator first, ForwardIterator last, UnaryPredicate p) {
+  ForwardIterator maxElemIt = find_if(first, last, p);
+  for (ForwardIterator cur = maxElemIt; cur != last; ++cur) {
+    // cur != maxElemIt is checked to avoid re-calculation of p(*maxElemIt) at first iteration
+    if (cur != maxElemIt && p(*cur) && *maxElemIt < *cur) {
+      maxElemIt = cur;
+    }
+  }
+  return maxElemIt;
 }
 
 void TestUniqueMax() {
@@ -105,7 +123,5 @@ int main() {
   tr.RunTest(TestUniqueMax, "TestUniqueMax");
   tr.RunTest(TestSeveralMax, "TestSeveralMax");
   tr.RunTest(TestNoMax, "TestNoMax");
-  vector<int> v{5, 82, 82, 9, 7, 1};
-  cout << *max_element_if(v.begin(), v.end(), [](int x){return x % 2 == 0;});
   return 0;
 }
