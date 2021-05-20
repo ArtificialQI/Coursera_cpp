@@ -10,32 +10,37 @@ public:
 
   void SetLogLine(bool value) { log_line = value; }
   void SetLogFile(bool value) { log_file= value; }
+  bool GetLogFile() const { return log_file; }
+  bool GetLogLine() const { return log_line; }
 
-  void Log(const string& message);
-
+  void Log(const string& message) {
+    os << message;
+  }
 private:
   ostream& os;
   bool log_line = false;
   bool log_file = false;
 };
 
-void Logger::Log(const string& message) {
-  if (log_file && !log_line) {
-    os << __FILE__ << " " << message << endl;
-  }
-  else if (log_file && log_line) {
-    os << __FILE__ << ":" << __LINE__ << " " << message << endl;
-  }
-  else if (!log_file && log_line) {
-    os << "Line " << __LINE__ << " " << message << endl;
-  }
-  else
-    os << message << endl;
-}
-
-#define LOG(logger, message) {  \
-  logger.Log(message);          \
-}
+#define LOG(logger, message) {                                    \
+  ostringstream out;                                              \
+  if (logger.GetLogFile() && !logger.GetLogLine()) {              \
+      out << __FILE__ << " " << message << endl;                  \
+      logger.Log(out.str());                                      \
+  }                                                               \
+  else if (logger.GetLogFile() && logger.GetLogLine()) {          \
+    out << __FILE__ << ":" << __LINE__ << " " << message << endl; \
+    logger.Log(out.str());                                        \
+  }                                                               \
+  else if (!logger.GetLogFile() && logger.GetLogLine()) {         \
+    out << "Line " << __LINE__ << " " << message << endl;         \
+    logger.Log(out.str());                                        \
+  }                                                               \
+  else {                                                          \
+    out << message << endl;                                       \
+    logger.Log(out.str());                                        \
+  }                                                               \
+}                                                                                                            \
 
 void TestLog() {
 /* Для написания юнит-тестов в этой задаче нам нужно фиксировать конкретные
