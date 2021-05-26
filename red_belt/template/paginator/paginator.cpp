@@ -7,14 +7,60 @@
 using namespace std;
 
 // Реализуйте шаблон класса Paginator
+template <class It>
+class IteratorRange {
+  public:
+  IteratorRange(It f, It l) : first(f), last(l) {}
+
+  It begin() const {
+    return first;
+  }
+  It end() const {
+    return last;
+  }
+  size_t size() const {
+    return (last - first);
+  }
+
+  private:
+  It first, last;
+};
 
 template <typename Iterator>
 class Paginator {
+  public:
+  Paginator(Iterator f, Iterator l, size_t ps) : first(f), last(l), page_size(ps) {
+
+    Iterator current = first;
+    for (;current < last;) {
+      size_t size = last - current;
+      IteratorRange<Iterator> ir{current, next(current, min(page_size, size))};
+      v.push_back(ir);
+      current += min(page_size, size);
+    }
+  }
+
+  auto begin() const {
+    return v.begin();
+  }
+  auto end() const {
+    return v.end();
+  }
+  size_t size() const {
+    return v.size();
+  }
+
+  private:
+  Iterator first, last;
+  size_t page_size;
+  vector<IteratorRange<Iterator>> v;
+
 };
 
 template <typename C>
-??? Paginate(C& c, size_t page_size) {
-  // Реализуйте этот шаблон функции
+auto Paginate(C& c, size_t page_size) {
+  Paginator result(c.begin(), c.end(), page_size);
+  return result;
 }
 
 void TestPageCounts() {
