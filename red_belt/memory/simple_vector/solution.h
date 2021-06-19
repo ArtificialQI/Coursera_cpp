@@ -26,12 +26,7 @@ private:
 };
 
 template <typename T>
-SimpleVector<T>::SimpleVector(size_t size)
-  : data(new T[size])
-  , size(size)
-  , capacity(size)
-{
-}
+SimpleVector<T>::SimpleVector(size_t size): data(new T[size]), size(size), capacity(size) {}
 
 template <typename T>
 SimpleVector<T>::~SimpleVector() {

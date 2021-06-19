@@ -1,7 +1,7 @@
 #pragma once
 
-#include <cstdlib>
-
+#include <algorithm>
+using namespace std;
 // Реализуйте шаблон SimpleVector
 template <typename T>
 class SimpleVector {
@@ -13,10 +13,10 @@ public:
   T& operator[](size_t index);
 
   T* begin() {return data;};
-  T* end() {return end_;};
+  T* end() {return data + size_;};
 
   const T* begin() const {return data;};
-  const T* end()  const {return end_;};
+  const T* end()  const {return data + size_;};
 
   size_t Size() const;
   size_t Capacity() const;
@@ -24,18 +24,12 @@ public:
 
 private:
   T* data = nullptr;
-  T* end_ = data;
   size_t size_ = 0;
   size_t capacity_ = 0;
 };
 
-template <class T>
-SimpleVector<T>::SimpleVector(size_t size) {
-  data = new T[size];
-  end_ = data + size;
-  size_ = size;
-  capacity_ = size;
-}
+template <typename T>
+SimpleVector<T>::SimpleVector(size_t size): data(new T[size]), size(size), capacity(size) {}
 
 template<class T>
 SimpleVector<T>::~SimpleVector() {
@@ -58,6 +52,18 @@ size_t SimpleVector<T>::Capacity() const {
 }
 
 template<class T>
+void SimpleVector<T>::PushBack(const T& value) {
+ if (size_ == capacity_) {
+    auto new_cap = capacity_ == 0 ? 1 : 2 * capacity_;
+    auto new_data = new T[new_cap];
+    copy(begin(), end(), new_data);
+    delete[] data;
+    data = new_data;
+    capacity_ = new_cap;
+  }
+  data[size_++] = value;
+}
+/* template<class T>
 void SimpleVector<T>::PushBack(const T& value) {
   if (data == nullptr) {
     data = new T[1];
@@ -83,4 +89,4 @@ void SimpleVector<T>::PushBack(const T& value) {
     ++size_;
     end_ = data + size_;
   }
-}
+} */
