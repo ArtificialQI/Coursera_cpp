@@ -25,7 +25,50 @@ private:
   Node* head = nullptr;
 };
 
-template <typename T>
+template<class T>
+void LinkedList<T>::PushFront(const T& value) {
+    Node* ptr = new Node;
+    ptr->value = value;
+    Node* tmp = head;
+    head = ptr;
+    head->next = tmp;
+}
+template<class T>
+void LinkedList<T>::InsertAfter(Node* node, const T& value) {
+  if (node == nullptr)
+    PushFront(value);
+  else {
+    Node* ptr = new Node;
+    ptr->value = value;
+    ptr->next = node->next;
+    node->next = ptr;
+  }
+}
+template<class T>
+void LinkedList<T>::RemoveAfter(Node* node) {
+  if (node == nullptr)
+    PopFront();
+  else if (node->next != nullptr) {
+  Node* to_remove = node->next;
+  node->next = node->next->next;
+  delete to_remove;
+  }
+}
+template <class T>
+void LinkedList<T>::PopFront() {
+  if (head != nullptr) {
+  Node* new_head = head->next;
+  delete head;
+  head = new_head;
+  }
+}
+template <class T>
+LinkedList<T>::~LinkedList() {
+  while(head != nullptr)
+    PopFront();
+}
+
+template <class T>
 vector<T> ToVector(const LinkedList<T>& list) {
   vector<T> result;
   for (auto node = list.GetHead(); node; node = node->next) {

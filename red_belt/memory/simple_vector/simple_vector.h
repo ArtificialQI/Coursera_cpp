@@ -63,30 +63,3 @@ void SimpleVector<T>::PushBack(const T& value) {
   }
   data[size_++] = value;
 }
-/* template<class T>
-void SimpleVector<T>::PushBack(const T& value) {
-  if (data == nullptr) {
-    data = new T[1];
-    data[0] = value;
-    ++size_;
-    ++capacity_;
-    end_ = data + size_;
-  } else if (size_ == capacity_) {
-
-    size_t new_capacity_ = 2 * capacity_;
-    T* new_data = new T[new_capacity_];
-    for (size_t i = 0; i < size_; ++i) {
-      new_data[i] = data[i];
-    }
-    new_data[size_] = value;
-    ++size_;
-    capacity_ *= 2;
-    delete[] data;
-    data = new_data;
-    end_ = data + size_;
-  } else {
-    data[size_] = value;
-    ++size_;
-    end_ = data + size_;
-  }
-} */
